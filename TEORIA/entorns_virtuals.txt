@@ -1,0 +1,62 @@
+Enlloc d'instal·lar paquets globals és millor fer-ho de manera local en entorns virtuals.
+ - No no tots el projectes utilitzen tots els paquets.
+ - Sempre tindrem por d'esborrar un paquet ja que no estarem segurs de si l'utilitza algun projecte.
+ - Canvis de versió dels paquets: una versió nova pot no ser 100% compatible amb versions anteriors.
+ - Podem esborrar un projecte sense deixar instal·lacions innecesàries.
+
+Font:
+https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment
+https://www.youtube.com/watch?v=wLgcPDlif9o
+
+
+1- Verificar que tenim instal·lat pip
+		Windows: 	py -m pip --version
+		Linux: 		python3 -m pip --version
+   Podem instal·lar/actualitzar pip amb:
+		Windows: 	py -m pip install --upgrade pip
+		Linux: 		python3 -m pip install --user --upgrade pip
+
+2- Crear i entrar en el directori del projecte python
+
+3- Crear l'entorn virtual amb:
+		Windows: 	py -m venv env				env és el nom que li donem a l'entorn virtual (pot ser altre)
+		Linux:		python3 -m venv env			Es crearà un directori env dins del qual estarà la instal·lació virtual de Python.
+												Nota: Si utilitzen git ignorarem este directori en .gitignore
+	
+4- Abans de poder instal·lar i utilitzar paquets en l'entorn virtual l'hem d'activar.
+		Windows:	.\env\Scripts\activate		activate és un .bat. Pordríem entrar en el directori .\env\Scripts\ i llançar activate directament.
+		Linux:		source env/bin/activate
+
+   A l'activar-lo entrem en l'entorn virtual. Se sap que està actiu perque el prompt comença pel nom de l'entorn virtual (env)
+
+5- Per a vore els paquets de tenim instal·lat en l'entorn virtual fem:
+		windows/Linux:	pip list
+
+
+6- Instal·lació de paquets
+		Windows/Linux:	pip install numpy pandas		numpy i pandas són els paquets que instal·lem
+
+   Si volem desinstal·lar un paquet fem:
+		windows/Linux: pip uninstall paquet
+	
+7- Exportar les dependències. Permet instal·lar-les en un altre entorn virtual.
+		Windows:	py -m pip freeze > requirements.txt
+		Linux:		python3 -m pip freeze > requirements.txt
+   
+   Importar les dependències anteriors:
+		Windows:	pip install -r requirements.txt
+
+8- Per a esborrar un entorn virtual el desactivem i borrem el directori.
+		Windows/Linux:	deactivate
+		Windows:		rmdir env /s
+		Linux:			rm -rf env
+
+
+
+
+Ens hem d'assegurar que VSCode executa l'interpret de python de l'entorn virtual i no un altre, com el general del sistema.
+En la barra d'estat podem vore la ruta de l'interpret, ha de ser ./env/Scripts/python.exe
+Si no es este l'hem de canviar, farem:
+	- Mostrar la paleta de comandos amb ctrl + shift + P
+	- Busquem python: select interpreter
+	  Ens mostrarà una llista de tots els interprets que tenim instal·lats, hem de triar el de l'entorn virtual
