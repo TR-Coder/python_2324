@@ -36,7 +36,7 @@ s5 = 'hola'	 # s5[0]
 # ------------------
 # Els string són IMMUTABLES
 # ------------------
-s5[0] = 'x'		# Error, no podem canviar un string
+# s5[0] = 'x'		# Error, no podem canviar un string
 
 # ------------------
 # substrings: [inici, final, increment]

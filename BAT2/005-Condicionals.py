@@ -5,13 +5,13 @@
 # L'operador AND treballa amb curtcircuit, o siga: X and Y, retorna X si bool(x) és fals, sinó retorna Y.
 
 # Este codi:
-c = b and a/b
+# c = b and a/b
 
 # Equival a:
-if b:
-    c = a / b
-else:
-    c = b
+# if b:
+#     c = a / b
+# else:
+#     c = b
 
 # per la qual cosa podem escriure:
 a = 10
@@ -26,7 +26,8 @@ print(c)
 #
 # Podem aprofitat esta característica per assignar a una variable un valor per defecte:
 # Si bool(value) és False l'operador or retornarà default.
-var_name = value or default
+
+# var_name = value or default
 
 # Per exemple, este codi demana una entrada per teclat i si nó s'introduïx res a lang se li assignarà 'Python':
 lang = input('Enter your language:') or 'Python'
@@ -101,18 +102,17 @@ print(f"L'estat de l'aigua és {estat}")
 # EXERCICI 2
 # ----------
 usuari_guardat : str = 'usuari'
-usuari_introduit: str = input('Introduïx l\'usuari: ')
-usuari_introduit_formatat: str = usuari_introduit.strip().lower()
+usuari_introduit: str = input('Introduïx l\'usuari: ').strip().lower()
 
 # SOLUCIÓ 1
-usuari_es_correcte : bool = (usuari_guardat == usuari_introduit_formatat)
+usuari_es_correcte : bool = (usuari_guardat == usuari_introduit)
 if usuari_es_correcte:
     print('Usuari correcte')
 else:
     print('Usuari incorrecte')
 
 # SOLUCIÓ 2
-missatge : str = 'Usuari correcte' if (usuari_guardat == usuari_introduit_formatat) else 'Usuari incorrecte'
+missatge : str = 'Usuari correcte' if (usuari_guardat == usuari_introduit) else 'Usuari incorrecte'
 print(missatge)
 
 # ----------
@@ -168,9 +168,9 @@ if costat2 > costat_major:
 if costat3 > costat_major:
     costat_major = costat3
 
-suma: float = costat1 + costat2 + costat3 - costat_major
+suma_costats_menors: float = costat1 + costat2 + costat3 - costat_major
 
-if costat_major >= suma:
+if costat_major >= suma_costats_menors:
     print('No és un triangle')
     exit()
 
@@ -204,8 +204,8 @@ if opcioPizza == '1':
     print(' 1- Pebrera')
     print(' 2- Tofu')
 
-    opcio_ingredient_addicional = input('Indica l\'ingredient addicional: ')
     tipus_pizza = 'vegetariana'
+    opcio_ingredient_addicional = input('Indica l\'ingredient addicional: ')
 
     if opcio_ingredient_addicional == '1':
         ingredient_addicional = 'Pebrera: '
@@ -215,14 +215,13 @@ if opcioPizza == '1':
         print('Ingredient addicional incorrecte \n')
         exit()
 
-    print(f'Has triat una pizza vegetariana amb {ingredient_addicional}')
-
 elif opcioPizza == '0':
     print(' 1- Pernil')
     print(' 2- Salmó')
+    
+    tipus_pizza = 'no vegetariana'
     opcio_ingredient_addicional = input('Indica l\'ingredient addicional: ')
 
-    tipus_pizza = 'no vegetariana'
     if opcio_ingredient_addicional == '1':
         ingredient_addicional = 'Pernil: '
     elif opcio_ingredient_addicional == '2':
