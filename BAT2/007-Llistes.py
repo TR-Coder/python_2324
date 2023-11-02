@@ -74,21 +74,43 @@
 # =====================
 # EXERCICI 4: ELIMINAR DUPLICATS D'UN LIST
 # =====================
-# # Solució 1
-# entrada_dades = '1 2 3 4 5 6       1      2 3'
-# conjunt = set(entrada_dades.split())
-# llista = sorted(list(conjunt))	# L'ordenem com a exemple
-# print(llista)
+# import random
+# import time
 
-# # Solució 2
-# llista2 = []
-# for item in entrada_dades:
-#     if item not in llista2:
-#         llista2.append(item)
-# print(llista2)
+# Generar nombres aleatoris (20s)
+# temps_inicial = time.time()
+# dades = [random.randint(0, 100) for _ in range(100000000)]
+# temps_final = time.time()
+# print(f'TEMPS GENERAR NOMBRES ALEATORIS: {temps_final - temps_inicial}')
+
+# temps_inicial = time.time()
+
+# Solució 1 (0.3s)
+# conjunt = set(dades)
 
 
+# Solució 2 (19s)
+# llista = []
+# temps_inicial = time.time()
+# for item in dades:
+#     if item not in llista:
+#         llista.append(item)
+
+# Solució 3 (12s)
+# llista = sorted(dades)
+# resultat = []
+# item_anterior = -1
+# for item in dades:
+#     if item != item_anterior:
+#         resultat.append(item)
+
+
+# temps_final = time.time()
+# print(f'TEMPS: {temps_final - temps_inicial}')
+
+# =====================
 # EXERCICI 5: llista paraules prohibides
+# =====================
 # Tinc una llista de paraules prohibides i un altra de paraules substitutes.
 # He de fer la substitució en un text.
 #
