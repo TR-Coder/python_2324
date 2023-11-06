@@ -55,20 +55,37 @@
 # Separar per comes i posar la conjunció 'i' al final.
 # =========================
 
-# lletra: list[str] = ['zero', 'un', 'dos', 'tres',
-#                      'quatre', 'cinc', 'sis', 'set', 'huit', 'nou']
+# Solució 1:
+#
+# lletra: list[str] = ['zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'huit', 'nou']
 
 # nombre = input('Introduïx un nombre: ')
-# cadena: str = ''
 
 # if len(nombre) == 0:
-#     print('No hi ha nombre')
-#     exit()
-#
-# conjuncio = ' i ' if len(nombre) > 1 else ''
-# llista_lletres: list[str] = [lletra[int(x)] for x in nombre]
-# cadena = ', '.join(llista_lletres[:-1]) + conjuncio + llista_lletres[-1]
-# print(cadena)
+#     txt = 'Error'
+# elif len(nombre)==1:
+#     txt = lletra[int(nombre)]
+# else:
+#     llista_lletres: list[str] = [lletra[int(x)] for x in nombre]
+#     txt = ', '.join(llista_lletres[:-1]) + ' i ' + llista_lletres[-1]
+
+# print(txt)
+
+
+# Solució 2:
+# lletra: list[str] = ['zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'huit', 'nou']
+
+# nombre:str = input('Introduïx un nombre: ')
+
+# txt: str = 'Error' if nombre=='' else lletra[int(nombre[0])] 
+
+# if len(nombre)>1:
+#     for digit in nombre[1:-1]:              # Si len(nombre)==2 no entra en el bucle
+#         txt += ', ' + lletra[int(digit)]
+#     txt += ' i ' + lletra[int(nombre[-1])]
+
+# print(txt)
+
 
 
 # =====================
@@ -165,153 +182,153 @@ import os
 #     cadena.append(x)
 #
 
-dibuix: list = ['''
-      +---+
-      |   |
-          |
-          |
-          |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-          |
-          |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-      |   |
-          |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-     /|   |
-          |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-     /|\  |
-          |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-     /|\  |
-     /    |
-          |
-    =========''', '''
-      +---+
-      |   |
-      O   |
-     /|\  |
-     / \  |
-          |
-    =========''']
+# dibuix: list = ['''
+#       +---+
+#       |   |
+#           |
+#           |
+#           |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#           |
+#           |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#       |   |
+#           |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#      /|   |
+#           |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#      /|\  |
+#           |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#      /|\  |
+#      /    |
+#           |
+#     =========''', '''
+#       +---+
+#       |   |
+#       O   |
+#      /|\  |
+#      / \  |
+#           |
+#     =========''']
 
 
-class bg:
-    black = '\033[40m'
-    red = '\033[41m'
-    green = '\033[42m'
-    orange = '\033[43m'
-    blue = '\033[44m'
-    purple = '\033[45m'
-    cyan = '\033[46m'
-    lightgrey = '\033[47m'
+# class bg:
+#     black = '\033[40m'
+#     red = '\033[41m'
+#     green = '\033[42m'
+#     orange = '\033[43m'
+#     blue = '\033[44m'
+#     purple = '\033[45m'
+#     cyan = '\033[46m'
+#     lightgrey = '\033[47m'
 
 
-def pinta_pantalla():
-    os.system('cls')
-    print(f'{bg.blue}JOC DEL PENJAT{bg.black}')
-    print(f'==============')
-    print(
-        f'{errors} errors. Et queden {INTENTS-errors} intents. {bg.red}Lletres incorrectes: {lletres_incorrectes}{bg.black}')
-    print()
-    print(''.join(cadena))
-    print(dibuix[errors])
+# def pinta_pantalla():
+#     os.system('cls')
+#     print(f'{bg.blue}JOC DEL PENJAT{bg.black}')
+#     print(f'==============')
+#     print(
+#         f'{errors} errors. Et queden {INTENTS-errors} intents. {bg.red}Lletres incorrectes: {lletres_incorrectes}{bg.black}')
+#     print()
+#     print(''.join(cadena))
+#     print(dibuix[errors])
 
 
-paraula_a_endevinar: str = 'VELOCITAT RAPIDA'
-paraula_secreta: list = list(paraula_a_endevinar)
-INTENTS: int = 6
-errors: int = 0
-lletres_incorrectes: str = ''
+# paraula_a_endevinar: str = 'VELOCITAT RAPIDA'
+# paraula_secreta: list = list(paraula_a_endevinar)
+# INTENTS: int = 6
+# errors: int = 0
+# lletres_incorrectes: str = ''
 
-cadena: list = [' ' if c == ' ' else '-' for c in paraula_secreta]
+# cadena: list = [' ' if c == ' ' else '-' for c in paraula_secreta]
 
-while (errors < INTENTS) and (cadena != paraula_secreta):
-    pinta_pantalla()
-    lletra_entrada = input('Lletra? ')
-    if lletra_entrada == '':
-        continue
+# while (errors < INTENTS) and (cadena != paraula_secreta):
+#     pinta_pantalla()
+#     lletra_entrada = input('Lletra? ')
+#     if lletra_entrada == '':
+#         continue
 
-    lletra_entrada = lletra_entrada[0].capitalize()
-    if lletra_entrada in lletres_incorrectes:
-        continue
+#     lletra_entrada = lletra_entrada[0].capitalize()
+#     if lletra_entrada in lletres_incorrectes:
+#         continue
 
-    has_encertat = False
-    for i, caracter in enumerate(paraula_secreta):
-        if caracter == lletra_entrada:
-            cadena[i] = lletra_entrada
-            has_encertat = True
+#     has_encertat = False
+#     for i, caracter in enumerate(paraula_secreta):
+#         if caracter == lletra_entrada:
+#             cadena[i] = lletra_entrada
+#             has_encertat = True
 
-    if not has_encertat:
-        lletres_incorrectes += lletra_entrada
-        errors += 1
-        if errors == INTENTS:
-            pinta_pantalla()
-            print(
-                f'{bg.red}Has perdut, la paraula era {paraula_a_endevinar}{bg.black}')
-            break
-else:
-    print(f'{bg.green}Molt bé, la paraula és {paraula_a_endevinar}{bg.black}')
+#     if not has_encertat:
+#         lletres_incorrectes += lletra_entrada
+#         errors += 1
+#         if errors == INTENTS:
+#             pinta_pantalla()
+#             print(
+#                 f'{bg.red}Has perdut, la paraula era {paraula_a_endevinar}{bg.black}')
+#             break
+# else:
+#     print(f'{bg.green}Molt bé, la paraula és {paraula_a_endevinar}{bg.black}')
 
-print(bg.black)
+# print(bg.black)
 
 
 
-# --------------------------------------------------------------------------------------------
-# EXERCICI 7: CREAR UNA GRAELLA FILA-COLUMNA 
-# --------------------------------------------------------------------------------------------
-# vector[fila1, fila2...]
-# vector[0] = [A1,A2,A3,A4,A5,A6,A7,A8]
-#
-# [fila][columna]
-#
-# |A1|A2|A3|A4|A5|A6|A7|A8|
-# |B1|B2|B3|B4|B5|B6|B7|B8|
-# |C1|C2|C3|C4|C5|C6|C7|C8|
-# |D1|D2|D3|D4|D5|D6|D7|D8|
-# |E1|E2|E3|E4|E5|E6|E7|E8|
-# |F1|F2|F3|F4|F5|F6|F7|F8|
-# |G1|G2|G3|G4|G5|G6|G7|G8|
-# |H1|H2|H3|H4|H5|H6|H7|H8|
+# # --------------------------------------------------------------------------------------------
+# # EXERCICI 7: CREAR UNA GRAELLA FILA-COLUMNA 
+# # --------------------------------------------------------------------------------------------
+# # vector[fila1, fila2...]
+# # vector[0] = [A1,A2,A3,A4,A5,A6,A7,A8]
+# #
+# # [fila][columna]
+# #
+# # |A1|A2|A3|A4|A5|A6|A7|A8|
+# # |B1|B2|B3|B4|B5|B6|B7|B8|
+# # |C1|C2|C3|C4|C5|C6|C7|C8|
+# # |D1|D2|D3|D4|D5|D6|D7|D8|
+# # |E1|E2|E3|E4|E5|E6|E7|E8|
+# # |F1|F2|F3|F4|F5|F6|F7|F8|
+# # |G1|G2|G3|G4|G5|G6|G7|G8|
+# # |H1|H2|H3|H4|H5|H6|H7|H8|
 
-#
-# vector = []
-# for caracter in 'ABCDEFGH':
-#     fila = []
-#     for nombre in '12345678':
-#         fila.append(caracter+nombre)
-#     vector.append(fila) 
+# #
+# # vector = []
+# # for caracter in 'ABCDEFGH':
+# #     fila = []
+# #     for nombre in '12345678':
+# #         fila.append(caracter+nombre)
+# #     vector.append(fila) 
 
-# print(vector[1][3]) 
+# # print(vector[1][3]) 
+
+# # for f in vector:
+# #     print('|' + '|'.join(f) + '|')
+
+
+
+# vector= [[x+y for y in '12345678'] for x in 'ABCDEFGH']
+# print(vector)
 
 # for f in vector:
 #     print('|' + '|'.join(f) + '|')
-
-
-
-vector= [[x+y for y in '12345678'] for x in 'ABCDEFGH']
-print(vector)
-
-for f in vector:
-    print('|' + '|'.join(f) + '|')

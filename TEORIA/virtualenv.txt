@@ -1,0 +1,42 @@
+# Entrar com a superusuari.
+
+# Actualitzem els repositoris i fem la instal·lació de la versió 3.11 de Python:
+  # apt-get install software-properties-common
+  # add-apt-repository ppa:deadsnakes/ppa
+  # apt update
+  # apt install python3.11
+
+# Actualitzem el pip i instal·len virtualenv
+  # python3 -m pip install --upgrade pip
+  # pip3 install virtualenv
+
+# Mirem on està insta·lat el python3.11: sol ser /usr/bin/python3.11
+
+# Entrem en la carpeta on estarà el nostre projecte de Python i generem l'entorn virtual amb la versió de Python desitjada.
+  # cd projecte
+  # virtualenv -p /usr/bin/python3.11 venv
+
+# Activem l'entorn virtual i comprobem que estem en la versió desitjada.
+  # source venv/bin/activate
+  # python -V
+
+# Si el desactivem l'entorn virtual toranrem a la versió del sistema de python.
+  # deactivate
+  # python -V
+
+
+
+# ============================================================================================
+# ============================================================================================
+# Per a tindre diferents versions de python en el sistema y canviar entre elles:
+# Primer: Hem d'instal·lar les diferents versions amb apt install python3.11 con hem fet dalt.
+# Segon: Hem d'afegir la versió a 'alternatives':
+#   Hem de deixar la versió actual amb la prioritat més alta, 1 en l'exemple següent:
+    # sudo update-alternatives --install /usr/bin/python  python  /usr/bin/python3.11 0
+    # sudo update-alternatives --install /usr/bin/python  python  /usr/bin/python3.8  1
+# Tercer: Hem de triar la versió activa amb:
+    # sudo update-alternatives --config python
+
+
+
+
