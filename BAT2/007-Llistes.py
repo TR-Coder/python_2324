@@ -54,9 +54,9 @@
 # EXERCICI 3: Pasar un nombre a text.
 # Separar per comes i posar la conjunció 'i' al final.
 # =========================
-
+# -----------
 # Solució 1:
-#
+# -----------
 # lletra: list[str] = ['zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'huit', 'nou']
 
 # nombre = input('Introduïx un nombre: ')
@@ -71,8 +71,9 @@
 
 # print(txt)
 
-
+# ----------
 # Solució 2:
+# ----------
 # lletra: list[str] = ['zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'huit', 'nou']
 
 # nombre:str = input('Introduïx un nombre: ')
@@ -85,8 +86,6 @@
 #     txt += ' i ' + lletra[int(nombre[-1])]
 
 # print(txt)
-
-
 
 # =====================
 # EXERCICI 4: ELIMINAR DUPLICATS D'UN LIST
@@ -102,25 +101,30 @@
 
 # temps_inicial = time.time()
 
+# -----------------
 # Solució 1 (0.3s)
+# -----------------
 # conjunt = set(dades)
 
 
+# -----------------
 # Solució 2 (19s)
+# -----------------
 # llista = []
 # temps_inicial = time.time()
 # for item in dades:
 #     if item not in llista:
 #         llista.append(item)
 
+# -----------------
 # Solució 3 (12s)
+# -----------------
 # llista = sorted(dades)
 # resultat = []
 # item_anterior = -1
 # for item in dades:
 #     if item != item_anterior:
 #         resultat.append(item)
-
 
 # temps_final = time.time()
 # print(f'TEMPS: {temps_final - temps_inicial}')
@@ -140,21 +144,29 @@
 # (USB-Universal Serial Bus en Anglès) actual estàndard per a la connectivitat
 # de dispositius informàtics.'''
 
+# # -----------------------
 # # Solució 1: amb replace
+# # -----------------------
 # for paraula_prohibida, paraula_substituta in zip(llista_prohibida, llista_substituta):
 #     txt = txt.replace(paraula_prohibida, paraula_substituta)
 # print(txt)
 
+# #----------------------------------
 # # Solució 2: amb operador morsa :=
+# #----------------------------------
 # [txt := txt.replace(paraula_prohibida, paraula_substituta) for paraula_prohibida,
 #  paraula_substituta in zip(llista_prohibida, llista_substituta)]
 # print(txt)
 
+# #----------------------------------
 # # Solució 3: amb funció reduce
+# #----------------------------------
 # x = functools.reduce(lambda x, y: x.replace(
 #     *y), zip(llista_prohibida, llista_substituta), txt)
 
+# #----------------------------------
 # # Solució 4: split i enumerate
+# #----------------------------------
 
 # text = txt.split()
 
@@ -169,7 +181,7 @@
 # ---------------------
 # EXERCICI 6: EL PENJAT
 # ---------------------
-import os
+# import os
 
 # --------------------------------------------------------------------------------------------
 # JOC DEL PENJAT
@@ -300,6 +312,9 @@ import os
 # # --------------------------------------------------------------------------------------------
 # # vector[fila1, fila2...]
 # # vector[0] = [A1,A2,A3,A4,A5,A6,A7,A8]
+# # vector[1] = [B1,B2,B3,B4,B5,B6,B7,B8]
+# #       . . . . . . . .
+# # vector[7] = [H1,H2,H3,H4,H5,H6,H7,H8]
 # #
 # # [fila][columna]
 # #
