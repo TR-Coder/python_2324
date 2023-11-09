@@ -347,3 +347,7 @@
 
 # for f in vector:
 #     print('|' + '|'.join(f) + '|')
+
+
+# Tot en una línia
+# [print('|' + '|'.join(f) + '|') for f in [[x+y for y in '12345678'] for x in 'ABCDEFGH']]
