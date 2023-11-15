@@ -351,3 +351,32 @@
 
 # Tot en una línia
 # [print('|' + '|'.join(f) + '|') for f in [[x+y for y in '12345678'] for x in 'ABCDEFGH']]
+
+
+# --------------------------------------------------------------------------------------------
+# Exercici de funcions:
+# --------------------------------------------------------------------------------------------
+# Generar la seqüència: A-B-C-D, AA-AB-AC-AD,   AAA-ABA-AAC-ADA
+#                                BA-BB-BC-BD    BAA-BBA-BCA-BDA
+#                                CA-CB-CC-CD    CAA-CBA-CCA-CDA
+#                                DA-DB-DC-DD    DAA-DBA-DCA-DDA
+#                                                 . . . . 
+#                                               AAD-ABD-ACD-ADD
+#                                               BAD-BBD-BCD-BDD
+#                                               CAD-CBD-CCD-CDD
+#                                               DAD-DBD-DCD-DDD
+
+# De manera recursiva
+
+def f(i,ant):
+    if i==0:
+        print(ant)
+        return
+    for x in 'ABCD':
+        f(i-1,ant+x)
+
+for i in range(1,4):
+    f(i,'')
+
+
+
