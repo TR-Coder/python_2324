@@ -71,25 +71,165 @@
 #-------------
 # EXERCICI 4
 #-------------
+# Nota: a partir de la versió 3.7 els diccionaris matenen l'ordre d'inserció.
+#
 # Eliminar els valors duplicats d'un diccionari. Deixar la primera clau del valor duplicat.
-diccionari = {'a': 1, 'b': 2, 'c': 2, 'd': 3, 'e': 3}
+# diccionari = {'a': 1, 'b': 2, 'c': 2, 'd': 3, 'e': 3}
 
-# resultat = {}
-# valores_repetits = []
+# resultat:dict = {}
 # for clau, valor in diccionari.items():
-#     if valor not in valores_repetits:
-#         valores_repetits.append(valor)
+#     if valor not in resultat.values():
 #         resultat[clau] = valor
-
 # print(resultat)
 
-# El mateix, però deixar l'última clau del duplicat. Pista: reversed()
+
+
+# El mateix, però deixar l'última clau del duplicat.
+#   Pista:reversed()
+#   diccionari = { key:diccionari[key] for key in reversed(diccionari)}
+
 # resultat:dict = {}
 # for clau, valor in reversed(diccionari.items()):
 #     if valor not in resultat.values():
 #         resultat[clau] = valor
-#     resultat = dict(reversed(list(resultat.items())))
+# resultat = { key:resultat[key] for key in reversed(resultat)}
 # print(resultat)
+
+#-------------
+# EXERCICI 5
+#------------- 
+# A l'igual que passa amb les llistes, no poden anar esborrant elements mestres estem recorrent el diccionari.
+# Per exemple, el següent codi genera l'excepció: RuntimeError: dictionary changed size during iteration
+# diccionari = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+# for k,v in diccionari.items():
+#     if v%2==0:
+#         diccionari.pop(k)
+
+# -----------
+# Solució 1
+# -----------
+# La solució és fer una còpia de les claus diccionari. Recorrerem la còpia, però esborrem del diccionari original.
+# diccionari = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+# for key in list(diccionari.keys()):
+#     if diccionari[key] % 2 == 0:
+#         diccionari.pop(key)
+# print(diccionari)
+
+# -----------
+# Solució 2
+# -----------
+# Anotem les claus que hem d'esborrar en una llista que després recorrem per esborrar del diccionari les claus.
+#
+# diccionari = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+# claus_a_esborrar = []
+# for clau in diccionari:
+#     if diccionari[clau] % 2 == 0:
+#         claus_a_esborrar.append(clau)
+        
+# for clau in claus_a_esborrar:
+#     diccionari.pop(clau)
+
+# print(diccionari)
+
+# -----------
+# Solució 3
+# -----------
+# Crear un diccionari nou que continga només els elements que ens interessen.
+# diccionari_original = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+# diccionari_copia = {k:v for k,v in diccionari_original.items() if v % 2 != 0}
+
+# diccionari_original = diccionari_copia
+# diccionari_copia = {}
+# print(diccionari_original)
+
+
+#-------------
+# EXERCICI 6
+#------------- 
+# Partin d'este diccionari:
+# ies = {
+#     '1ESO': {
+#         'alumnes': 140,
+#         'grups': 4
+#     },
+#     '2ESO': {
+#         'alumnes': 160,
+#         'grups': 5
+#     }
+#  }
+
+# Mostrar (print) la informació de la següent manera:
+# --- 1ESO ---
+# alumnes=140
+# grups=4
+# --- 2ESO ---
+# alumnes=160
+# grups=5
+
+# for nivell in ies:
+#     print(f'--- {nivell} ---')
+#     for dades in ies[nivell]:
+#         print(f'{dades}={ies[nivell][dades]}')
+
+
+
+
+#-------------
+# EXERCICI 7
+#------------- 
+# sum(iterable, start) recorre iterable i suma els seus elements. start és el valor inicial de la suma inicial (per defecte 0)
+# Sumar el valors d'un diccionari. Després la multiplicaió.
+#
+# SUMA
+# diccionari = {'a': 1, 'b': 2, 'data3': 4}
+# suma = sum(diccionari.values())
+# print(suma)
+
+# MULTIPLICACIÓ. Solució 1
+# producte = 1
+# for valor in diccionari.values():
+#     producte *= valor
+# print(producte)
+
+# MULTIPLICACIÓ. Solució 2
+# producte = 1
+# [producte:=producte*valor for valor in diccionari.values()]
+# print(producte)
+
+# MULTIPLICACIÓ. Solució 3
+# from functools import reduce
+# producte = 1
+# resultado = reduce(lambda x, y: x*y, diccionari.values())
+# print(producte)
+
+
+#-------------
+# EXERCICI 8
+#-------------
+# # Crear un diccionari que a partir d'un string indique el nombre de vegades que apareix cada lletra.
+# str = 'AABCCC5'
+# diccionari:dict = {}
+# for lletra in str:
+#     diccionari[lletra] = diccionari.get(lletra, 0 ) + 1
+# print(diccionari)
+
+
+#-------------
+# EXERCICI 9
+#------------- 
+# Tenim una llista formada per tuples on cada tupla representa (nom_atleta, distancia_salt)
+# Obtindre un dicciori que indique per cada nom una llista dels salts que ha fet.
+# Exemple:
+# de          [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
+# obtindre:   {'Pere': [7.8], 'Carles': [7.7, 7.8, 7.7], 'David': [7.9, 7.8]}
+
+# llista = [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
+# diccionari:dict = {}
+# for nom, distancia in llista:
+#     diccionari.setdefault(nom, []).append(distancia)
+# print(diccionari)
+
+
 
 #-------------
 # EXERCICI 
