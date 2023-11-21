@@ -12,16 +12,18 @@
 # Solució 1
 # quadrat = { i:i**2 for i in range(1, 11)}
 
+
 # Solució 2
 # for i in range(1,11):
 #     quadrat[i] = i*i
 
 # Solució 3
 # for i in range(1,11):
-#     quadrat.setdefaulr(i, i*i)
+#     quadrat.setdefault(i, i*i)
 
 # Solució 4
-# quadrat = dict([(i,i*i) for i in range(1,11)])
+# iterable = [(i,i*i) for i in range(1,11)]
+# quadrat = dict(iterable)
 
 # Solució 5
 # for i in range(1, 11):
@@ -35,6 +37,14 @@
 
 # Solució 7
 # quadrat = dict(map(lambda i: (i, i**2), range(1, 11)))
+
+# Solució 8
+quadrat:dict = {}
+for x in range(1,11):
+    quadrat = {**quadrat,  **{x:x*x}}
+
+
+    # quadrat = quadrat | {x:x*x}
 
 
 # print(quadrat)
