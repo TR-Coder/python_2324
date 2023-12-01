@@ -102,6 +102,7 @@ for x in range(1,11):
 # for clau, valor in reversed(diccionari.items()):
 #     if valor not in resultat.values():
 #         resultat[clau] = valor
+
 # resultat = { key:resultat[key] for key in reversed(resultat)}
 # print(resultat)
 
@@ -216,11 +217,23 @@ for x in range(1,11):
 #-------------
 # EXERCICI 8
 #-------------
+# Solució 1
 # # Crear un diccionari que a partir d'un string indique el nombre de vegades que apareix cada lletra.
 # str = 'AABCCC5'
 # diccionari:dict = {}
 # for lletra in str:
 #     diccionari[lletra] = diccionari.get(lletra, 0 ) + 1
+# print(diccionari)
+
+
+# Solució 2
+# str = 'AABCCC5'
+# diccionari:dict = {}
+# for lletra in str:
+#     if lletra not in diccionari:
+#         diccionari[lletra]=0
+#     else:
+#         diccionari[lletra] = diccionari[lletra] + 1
 # print(diccionari)
 
 
@@ -233,11 +246,24 @@ for x in range(1,11):
 # de          [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
 # obtindre:   {'Pere': [7.8], 'Carles': [7.7, 7.8, 7.7], 'David': [7.9, 7.8]}
 
+# Solució 1
 # llista = [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
 # diccionari:dict = {}
 # for nom, distancia in llista:
 #     diccionari.setdefault(nom, []).append(distancia)
 # print(diccionari)
+
+# Solució 2
+# llista = [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
+# for nom, distancia in llista:
+#     if nom not in diccionari:
+#         diccionari[nom]=[distancia]
+#     else:
+#         diccionari[nom].append(distancia)
+# print(diccionari)
+
+
+
 
 
 

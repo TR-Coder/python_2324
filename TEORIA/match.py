@@ -168,4 +168,33 @@ a["language"] = "C++"
 runMatch4(a)
 
 
+# case "a":                           Match against the single value "a".
+# case ["a","b"]:                     Match against the collection ["a","b"].
+# case ["a", value1]:                 Match against a collection with two values, and place the second value in the capture variable value1.
+# case ["a", *values]:                Match against a collection with at least one value. The other values, if any, are stored in values. Note that you can include only one starred item per collection (as it would be with star arguments in a Python function).
+# case ("a"|"b"|"c"):                 The or operator (|) can be used to allow multiple cases to be handled in a single case block. Here, we match against either "a","b", or "c".
+# case ("a"|"b"|"c") as letter:       Same as above, except we now place the matched item into the variable letter.
+# case ["a", value] if <expression>:  Matches the capture only if expression is true. Capture variables can be used in the expression. For instance, if we used if value in valid_values, the case would only be valid if the captured value value was in fact in the collection valid_values.
+# case ["z", _]:                      Any collection of items that begins with "z" will match.
+
+
+match media_object:
+    case Image(codec="jpg"):                             # matches against an Image object with the codec attribute set to "jpg"
+        return media_object
+    case Image(codec="png") | Image(codec="gif"):       # matches if type is "png" or "gif"
+        return render_as(media_object, "jpg")
+    case Video():                                       # matches any object of type Video, no matter its attributes
+        raise ValueError("Can't extract frames from video yet")
+    case other_type:                                    # catch-all if everything else fails, although we use an actual name for the match to capture it instead of _.
+        raise Exception(f"Media object {media_object} 
+            of type {codec} can't be handled yet")
+
+
+
+
+
+
+
+
 # https://blog.enterprisedna.co/python-match-case/
+
