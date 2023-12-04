@@ -12,16 +12,18 @@
 # Solució 1
 # quadrat = { i:i**2 for i in range(1, 11)}
 
+
 # Solució 2
 # for i in range(1,11):
 #     quadrat[i] = i*i
 
 # Solució 3
 # for i in range(1,11):
-#     quadrat.setdefaulr(i, i*i)
+#     quadrat.setdefault(i, i*i)
 
 # Solució 4
-# quadrat = dict([(i,i*i) for i in range(1,11)])
+# iterable = [(i,i*i) for i in range(1,11)]
+# quadrat = dict(iterable)
 
 # Solució 5
 # for i in range(1, 11):
@@ -35,6 +37,14 @@
 
 # Solució 7
 # quadrat = dict(map(lambda i: (i, i**2), range(1, 11)))
+
+# Solució 8
+quadrat:dict = {}
+for x in range(1,11):
+    quadrat = {**quadrat,  **{x:x*x}}
+
+
+    # quadrat = quadrat | {x:x*x}
 
 
 # print(quadrat)
@@ -92,6 +102,7 @@
 # for clau, valor in reversed(diccionari.items()):
 #     if valor not in resultat.values():
 #         resultat[clau] = valor
+
 # resultat = { key:resultat[key] for key in reversed(resultat)}
 # print(resultat)
 
@@ -206,11 +217,23 @@
 #-------------
 # EXERCICI 8
 #-------------
+# Solució 1
 # # Crear un diccionari que a partir d'un string indique el nombre de vegades que apareix cada lletra.
 # str = 'AABCCC5'
 # diccionari:dict = {}
 # for lletra in str:
 #     diccionari[lletra] = diccionari.get(lletra, 0 ) + 1
+# print(diccionari)
+
+
+# Solució 2
+# str = 'AABCCC5'
+# diccionari:dict = {}
+# for lletra in str:
+#     if lletra not in diccionari:
+#         diccionari[lletra]=0
+#     else:
+#         diccionari[lletra] = diccionari[lletra] + 1
 # print(diccionari)
 
 
@@ -223,11 +246,24 @@
 # de          [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
 # obtindre:   {'Pere': [7.8], 'Carles': [7.7, 7.8, 7.7], 'David': [7.9, 7.8]}
 
+# Solució 1
 # llista = [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
 # diccionari:dict = {}
 # for nom, distancia in llista:
 #     diccionari.setdefault(nom, []).append(distancia)
 # print(diccionari)
+
+# Solució 2
+# llista = [('Pere', 7.8), ('Carles', 7.7), ('David', 7.9), ('Carles', 7.8), ('Carles', 7.7), ('David', 7.8)]
+# for nom, distancia in llista:
+#     if nom not in diccionari:
+#         diccionari[nom]=[distancia]
+#     else:
+#         diccionari[nom].append(distancia)
+# print(diccionari)
+
+
+
 
 
 
