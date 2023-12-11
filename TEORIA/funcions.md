@@ -111,7 +111,7 @@ Quan cridem a un funció els _arguments_ es copien als corresponents _paràmetre
 
 En Python quan s’envia una variable com a argument s’envia la referència a l’objecte a què fa referència la variable. Depenent de si l’objecte és mutable o immutable, la funció podrà modificar o no l’objecte.
 
-En el següent exemple la variable _a_ és global i immutable. La funció _f_ no pot canviar la referència cap l’objecte _4_ ni canviar el seu valor. 
+En el següent exemple la variable _b_ és global i immutable. La funció _f_ no pot canviar la referència cap l’objecte _4_ ni canviar el seu valor. 
 
 ```python
 b=4			# b=4 id(b)=9789088
