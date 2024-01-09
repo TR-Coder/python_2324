@@ -180,6 +180,11 @@ def demana_usuari_isbn_llibre_sense_ubicar() -> Tuple[bool, dict]:
         
         print('Error: Este isbn no està en la llista de llibres sense ubicar')
 
+def lleva_llibre_llista_llibres_sense_ubicar(isbn: str) -> None:
+     for index, llibre in enumerate(llibres_sense_ubicar):
+            if llibre['isbn']==isbn:
+                llibres_sense_ubicar.pop(index)
+                
 # --------------------------------------------
 def obtin_nou_codi_prestatgeria() -> int:
     return len(biblioteca) + 1
@@ -190,17 +195,30 @@ def crea_i_afig_una_prestatgeria_a_la_biblioteca() -> None:
     nova_prestatgeria = { 'id':id, 'estants':[]}
     biblioteca.append(nova_prestatgeria) 
 
+# --------------------------------------------
+def info():
+    print('Llibres sense ubicar')
+    for llibre in llibres_sense_ubicar:
+        print(f'  {llibre}')
+
+    print('\nEstants sense ubicar')
+    for estant in estants_sense_ubicar:
+        print(f'   {estant}')
+
+    print('\nPrestatgeries')
+    for prestatgeria in biblioteca:
+        print(f"  id={prestatgeria['id']}")
+        for estant in prestatgeria['estants']:
+            print(f'    {estant}')
 
 
 
 msg_error = ''
 
 while True:
-    print(f'\nBiblioteca : {biblioteca}')
-    print(f'Llibres sense ubicar {llibres_sense_ubicar}')
-    print(f'estants sense ubicar {estants_sense_ubicar}')
+    info()
     print('--- MENÚ ---')
-    print('1- Afig una estanteria nova a la biblioteca')
+    print('1- Afig una prestatgeria nova a la biblioteca')
     print('2- Crea un llibre nou')
     print('3- Crea un estant nou')
     print('4- Afig un estant a una prestatgeria')
@@ -230,6 +248,9 @@ while True:
             correcte, prestatgeria = demana_usuari_prestatgeria()
             if correcte:
                 correcte, msg_error= afig_llibre(prestatgeria, llibre)
+                if correcte:
+                    lleva_llibre_llista_llibres_sense_ubicar(llibre['isbn'])
+
     elif opcio == 'Q':
         exit()
     else:
