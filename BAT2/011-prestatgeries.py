@@ -48,7 +48,7 @@ def isbn_correcte(isbn:str)->bool:
 def crea_llibre()-> Tuple[bool,dict]:
     '''
         Retorna True i el llibre si el llibre s'ha creat.
-        Retorna False i {} sinó s'ha creat (Intro per a eixir).
+        Retorna False i {} si no s'ha creat (Intro per a eixir).
     '''
     while True:
         print('Introduïx un ISBN o Intro per a eixir')
@@ -133,10 +133,14 @@ def afig_llibre(prestatgeria: dict, llibre: dict) -> Tuple[bool, str]:
         Retorn True i '' si s'ha afegit el llibre al codi d'estanteria indicada.
         Retorna False i un missatge d'error si no s'afegit. Els errors són:
             'Prestatgeria plena, afig un nou estant'
+            'Prestatgeria sense estants'
     '''
+
+    if not prestatgeria['estants']:
+        return False, 'Prestatgeria sense estants' 
    
     for estant in prestatgeria['estants']:
-        if nombre_llibres(estant) + 1 < estant['capacitat']:
+        if nombre_llibres(estant) + 1 <= estant['capacitat']:
             estant['llibres'].append(llibre)
             return True, ''
 
@@ -196,6 +200,30 @@ def crea_i_afig_una_prestatgeria_a_la_biblioteca() -> None:
     biblioteca.append(nova_prestatgeria) 
 
 # --------------------------------------------
+def demana_usuari_isbn() -> Tuple[bool, str]:
+    while True:
+        print("Introduïx l'isbn del llibre a extraure")
+        isbn = input('ISBN? ')
+        if not isbn.strip():
+            return False, ''
+        if isbn_correcte(isbn):
+            return True, isbn
+        print('Error, codi ISBN incorrecte')
+
+
+
+def busca_llibre_i_lleva_de_biblioteca(isbn) -> Tuple[bool, str]:
+    for prestatgeria in biblioteca:
+        for index,estant in enumerate(prestatgeria['estants']):
+            for llibre in estant['llibres']:
+                if llibre['isbn']==isbn:
+                    llibres_sense_ubicar.append(llibre)
+                    estant['llibres'].pop(index)
+                    return True, ''
+    return False, "No s'ha trobat el llibre"
+
+
+# --------------------------------------------
 def info():
     print('Llibres sense ubicar')
     for llibre in llibres_sense_ubicar:
@@ -250,11 +278,14 @@ while True:
                 correcte, msg_error= afig_llibre(prestatgeria, llibre)
                 if correcte:
                     lleva_llibre_llista_llibres_sense_ubicar(llibre['isbn'])
-
+    elif opcio == '6':
+        correcte, isbn = demana_usuari_isbn()
+        if correcte:
+            correcte, msg_error = busca_llibre_i_lleva_de_biblioteca(isbn)
     elif opcio == 'Q':
         exit()
     else:
-        print('ERROR: Opció incorrecta')
+        msg_error = 'ERROR: Opció incorrecta'
     
     print(msg_error)
     msg_error = ''
