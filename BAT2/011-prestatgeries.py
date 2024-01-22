@@ -41,9 +41,9 @@ def isbn_correcte(isbn:str)->bool:
     '''
         Un ISBN sempre té 3 lletres en majúscula seguit de 3 dígits. Per exemple: MAT002
     '''
-    if len(isbn) != 6:
-        return False
-    return isbn[:3].isalpha() and isbn[3:].isdigit()
+    return len(isbn) == 6 and isbn[:3].isalpha() and isbn[3:].isdigit()
+
+
 
 def crea_llibre()-> Tuple[bool,dict]:
     '''
@@ -52,8 +52,8 @@ def crea_llibre()-> Tuple[bool,dict]:
     '''
     while True:
         print('Introduïx un ISBN o Intro per a eixir')
-        isbn = input('ISBN? ')
-        if not isbn.strip():
+        isbn = input('ISBN? ').strip()
+        if not isbn:
             return False, {}
         if isbn_correcte(isbn):
             break
@@ -70,49 +70,45 @@ def capacitat_estant_correcta(capacitat: int)->bool:
     '''
     return capacitat>=0 and capacitat<=10
 
+
 def crea_estant()-> Tuple[bool,dict]:
     '''
-        Crea un nou estant. La capacitat ha de complir la restricció.
+        Crea un nou estant. La capacitat ha de complir la restricció de capacitat_estant_correcta().
         Retorna False i {} si no hem creat l'estant (Intro per a eixir).
         Retorna True i el nou estant.
     '''
     while True:
         try:
-            print('Introduïx la quantita de llibres màxima o Intro per a eixir')
-            capacitat = input('Capacitat? ')  
-            if not capacitat.strip():
+            print('Introduïx la quantitat de llibres màxima o Intro per a eixir')
+            capacitat = input('Capacitat? ').strip()
+            if not capacitat:
                 return False, {}
             capacitat_int = int(capacitat)
             if capacitat_estant_correcta(capacitat_int):
                 return True, {'capacitat':capacitat_int, 'llibres':[]}
-            print('Error: capacitat fóra de límits')
         except ValueError:
-            print('Error: capacitat incorrecta')
-  
+            print('Error: capacitat fóra de límits')
 
 # --------------------------------------------
 def afig_estant(prestatgeria: dict) -> Tuple[bool, str]:
     '''
         No hi ha límit d'estants que es pot afegir a una estanteria.
-        Agafa un dels estants de la llista estants_sense_ubicar.
+        Agafa un qualsevol dels estants de la llista estants_sense_ubicar.
         Retorna True i '' si s'ha afegit l'estant a la prestatgeria.
-        Retorna Fase i un missatge d'error si no s'ha afegit.
-            El codi d'error és 'No queden estant nous per ubicar'
+        Retorna False i el missatge d'error: 'No queden estant nous per ubicar'
     '''
     try:
         estant = estants_sense_ubicar.pop()
+        prestatgeria['estants'].append(estant)
+        return True, ''
     except IndexError:
         return False, 'No queden estant nous per ubicar'
     
-    prestatgeria['estants'].append(estant)
-
-    return True, ''
-
 # --------------------------------------------
 def obtin_prestatgeria(id: int) -> Tuple[bool, dict]:
     '''
         Si l'identificador de la prestatgeria és correcte retorna True i la prestatgeria.
-        Si l'identificador no existix retorna False i {}
+        Si l'identificador id no existix retorna False i {}
     '''
     for prestatgeria in biblioteca:
         if prestatgeria['id']==id:
@@ -130,17 +126,16 @@ def nombre_llibres(estant: dict) -> int:
 
 def afig_llibre(prestatgeria: dict, llibre: dict) -> Tuple[bool, str]:
     '''
-        Retorn True i '' si s'ha afegit el llibre al codi d'estanteria indicada.
+        Retorn True i '' si s'ha afegit el llibre al codi d'estanteria indicat.
         Retorna False i un missatge d'error si no s'afegit. Els errors són:
             'Prestatgeria plena, afig un nou estant'
             'Prestatgeria sense estants'
     '''
-
     if not prestatgeria['estants']:
         return False, 'Prestatgeria sense estants' 
    
     for estant in prestatgeria['estants']:
-        if nombre_llibres(estant) + 1 <= estant['capacitat']:
+        if nombre_llibres(estant) < estant['capacitat']:
             estant['llibres'].append(llibre)
             return True, ''
 
@@ -149,15 +144,17 @@ def afig_llibre(prestatgeria: dict, llibre: dict) -> Tuple[bool, str]:
 
 def demana_usuari_prestatgeria() -> Tuple[bool, dict]:
     '''
-        Demana a l'usuari que introduixa el codi d'una prestatgeria.
+        Demana a l'usuari que introduisca el codi d'una prestatgeria.
         Retorna True i la prestatgeria si s'ha introduit un codi vàlid
-        Retorna False i {} si no s'ha introduït (Intro per a eixir)
+        Retorna False i {} si no s'ha introduït un codi vàlid (Intro per a eixir). Els errors són:
+            'Error, la prestatgeria no existix'
+            'Error, codi incorrecte'
     '''
     while True:
         try:
             print("Introduïx l'identificador d'una prestatgeria o Intro per a eixir")
-            id = input('Identificador? ')
-            if not id.strip():
+            id = input('Identificador? ').strip()
+            if not id:
                 return False, {}
             id_int = int(id)
             existix, prestatgeria = obtin_prestatgeria(id_int)
@@ -170,7 +167,7 @@ def demana_usuari_prestatgeria() -> Tuple[bool, dict]:
 
 def demana_usuari_isbn_llibre_sense_ubicar() -> Tuple[bool, dict]:
     '''
-        Demana a l'usuari que introduixa l'isbn d'un llibre de la llista de llibres sense ubicar o Intro per a continuar.
+        Demana a l'usuari que introduixa l'isbn d'un llibre que està en la llista de llibres sense ubicar o Intro per a continuar.
     '''
     while True:
         print("Introduïx l'isbn d'un llibre sense ubicar o Intro per a eixir")
@@ -178,6 +175,7 @@ def demana_usuari_isbn_llibre_sense_ubicar() -> Tuple[bool, dict]:
         if not isbn.strip():
             return False, {}
         
+
         for llibre in llibres_sense_ubicar:
             if llibre['isbn']==isbn:
                 return True, llibre
@@ -203,8 +201,8 @@ def crea_i_afig_una_prestatgeria_a_la_biblioteca() -> None:
 def demana_usuari_isbn() -> Tuple[bool, str]:
     while True:
         print("Introduïx l'isbn del llibre a extraure")
-        isbn = input('ISBN? ')
-        if not isbn.strip():
+        isbn = input('ISBN? ').strip()
+        if not isbn:
             return False, ''
         if isbn_correcte(isbn):
             return True, isbn
@@ -287,5 +285,6 @@ while True:
     else:
         msg_error = 'ERROR: Opció incorrecta'
     
-    print(msg_error)
+    print(' --------------------------- ')
+    print(f'ERROR: {msg_error}')
     msg_error = ''
