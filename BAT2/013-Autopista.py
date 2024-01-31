@@ -28,13 +28,16 @@ class Persona_no_este_cotxe(Exception):
 class Autopista:
     def __init__(self):
         self.vehicles = []
+
     def entra(self, cotxe):
         self.vehicles.append(cotxe)
+
     def ix(self, cotxe):
         try:
             self.vehicles.remove(cotxe)
         except ValueError:
             raise Cotxe_no_en_autopista
+        
     def __str__(self):
         matricula_cotxes = [str(vehicle.matricula) for vehicle in self.vehicles]
         return ' '.join(matricula_cotxes)
@@ -44,8 +47,10 @@ class Persona:
     def __init__(self, dni):
         self.dni = dni
 
-    def _eq_(self, persona):
-        return self.dni == persona.dni
+    def __eq__(self, persona):
+        if isinstance(persona, Persona):
+            return self.dni == persona.dni
+        return False
     
 
 #==================================================================================
@@ -69,11 +74,10 @@ class Cotxe:
         except ValueError:
             raise Persona_no_este_cotxe
 
-    def ix2(self, persona):
-        self.ocupants = [ocupant for ocupant in self.ocupants if ocupant.dni==persona.dni]
-
     def __eq__(self, cotxe):
-        return self.matricula == cotxe.matricula
+        if isinstance(cotxe, Cotxe):
+            return self.matricula == cotxe.matricula
+        return False
 
     def __str__(self):    
         dni_ocupants = [str(ocupant.dni) for ocupant in self.ocupants]
@@ -84,15 +88,25 @@ class Cotxe:
 
 p1 = Persona(111)
 p2 = Persona(222)
-p3 = Persona(9999)
+p3 = Persona(222)
 
 c1 = Cotxe('2341DFF')
 c2 = Cotxe('21354FW')
 
 c1.entra(p1)
-c1.entra(p1)
+c1.entra(p2)
+print(c1)
+c1.ix(p3)
 print(c1)
 
 # a7 = Autopista()
 # a7.entra(c1)
 # print(a7)
+
+
+
+
+# Ampliació exercici. Permetre que coxte.entra() admeta com a parametres moltes persones, com c1.entra(p1,p2)
+# def entra(self, *persona: Persona):
+#     if all(isinstance(p, Persona) for p in persona):
+#         self.ocupants.extend(persona)
