@@ -127,12 +127,11 @@ def busca_pel_licula(id: int) -> Pel_licula|None:
 #------------------------------------------------------------------------
 def modifica_pel_licula() -> None:
     while True:
-        id = input_type('Id de la pel·lícula a modificar','int')
-        if not id:
-            return
         
-        pel_licula = busca_pel_licula(id)                       # type: ignore
-        if not pel_licula:
+        if not (id:=input_type('Id de la pel·lícula a modificar','int')):    # type: ignore
+            return
+                
+        if not (pel_licula:=busca_pel_licula(id)):                # type: ignore
             print('Id incorrecte')
             continue
         
@@ -143,12 +142,10 @@ def modifica_pel_licula() -> None:
 #------------------------------------------------------------------------
 def esborra_pel_licula():
     while True:
-        id = input_type('Id de la pel·lícula a esborrar','int')
-        if not id:
+        if not (id:=input_type('Id de la pel·lícula a esborrar','int')):
             return
         
-        pel_licula = busca_pel_licula(id)
-        if not pel_licula:
+        if not (pel_licula:=busca_pel_licula(id)):
             print('Id incorrecte')
             continue 
 
@@ -209,12 +206,11 @@ def mostra_llista_cines() -> None:
             print(f'CINE: {cine.id} {cine.descripcio}')
             for sala in cine.sales:
                 print(f'   SALA {sala.id} {sala.descripcio}')
-
-        id_cine = input_type('Selecciona un cine', 'int')       
-        if not id_cine:
+           
+        if not(id_cine:= input_type('Selecciona un cine', 'int')):
             continue
-        cine = busca_cine(id_cine)                               # type: ignore
-        if not cine:
+
+        if not(cine:=busca_cine(id_cine)):                  # type: ignore
             error = 'Cine incorrecte'
             continue
 
