@@ -8,6 +8,8 @@ class sala_no_trobada(Exception):
     pass
 class cine_no_trobat(Exception):
     pass
+class input_type_cancel·lat(Exception):
+    pass
 #==========================================================================================================
 pel_licules:list[Pel_licula] = []
 cines:list[Cine] = []
@@ -15,7 +17,7 @@ cine_actiu:Cine|None = None
 sala_activa:Sala|None = None
 
 #==========================================================================================================
-def neteja_pantalla():
+def cls():
     comando = 'cls' if platform.system()=='Windows' else 'clear'
     os.system(comando)
 
@@ -89,7 +91,7 @@ def obtin_data_hora() -> dt.datetime:
 #==========================================================================================================
 def menu_pel_licules() -> None:
     while True:
-        neteja_pantalla()
+        cls()
         print('- LLISTA DE PEL·LÍCULES -')
         if not pel_licules:
             print(' No hi ha pel·licules')
@@ -161,7 +163,7 @@ def input_type(text:str, type:str='str') -> int|str|float|None:
         try:
             cadena = input(f'(Intro=Eixir) {text} ')
             if cadena=='':
-                return None
+                raise input_type_cancel·lat
             elif type=='int':
                 return int(cadena)
             elif type=='str':
@@ -181,7 +183,7 @@ def busca_cine(id: int) -> Cine|None:
     return None            
 
 #------------------------------------------------------------------------
-def busca_sala(id: int, cine:Cine) -> Sala|None:
+def busca_sala(id: int, cine:Cine) -> Sala:
     for sala in cine.sales:
         if sala.id == id:
             return sala
@@ -196,24 +198,20 @@ def mostra_cine_i_sales() -> None:
             print(f'   SALA {sala.id} {sala.descripcio}')
 
 #------------------------------------------------------------------------
-def selecciona_cine() -> Cine|None:
+def selecciona_cine() -> Cine:
+    cls()
     if not cines:
-        neteja_pantalla()
-        error = ' No hi ha cines. Intro per a continuar'
-        mostra_titol_i_error('- LLISTA DE CINES -', error )
+        print(' No hi ha cines. Intro per a continuar')
         input()
-        return cine_actiu
+        return None
     
-    neteja_pantalla()
     print('- LLISTA DE CINES -')
     mostra_cine_i_sales()
-
     while True:
         try: 
-            if id_cine:= input_type('Selecciona un cine', 'int'):
-                if cine:=busca_cine(id_cine):    # type: ignore
-                    return cine
-            return None
+            id_cine = input_type('Selecciona un cine', 'int')
+            cine = busca_cine(id_cine)                                  # type: ignore
+            return cine
         except cine_no_trobat:
             print('Cine incorrecte')
 
@@ -227,32 +225,23 @@ def mostra_sales_i_sessions(cine:Cine|None) -> None:
             print('     No hi ha sessions')
             continue
         for sessio in sala.sessions:
-            print(f'    SESSIÓ {sessio.id}: {sessio.data_hora.strftime('%d/%m/%y')} {sessio.pel_licula.info}')
+            print(f"    SESSIÓ {sessio.id}: {sessio.data_hora.strftime('%d/%m/%y')} {sessio.pel_licula.info}")
 
 #------------------------------------------------------------------------
-def demana_sala() -> Sala|None:
-    if id_sala:=input_type('Selecciona una sala', 'int'):
-        if sala:= busca_sala(id_sala, cine_actiu):
-            return sala
-    return None
+def demana_sala() -> Sala:
+    id_sala = input_type('Selecciona una sala', 'int')
+    sala = busca_sala(id_sala, cine_actiu)
+    return sala
     
 #------------------------------------------------------------------------
-def mostra_titol_i_error(txt:str, error:str='') -> str:
-    print(txt)
-    if error:
-        print(error)
-    return ''
-
-#------------------------------------------------------------------------
 def selecciona_sala() -> Sala:  
-    neteja_pantalla()
+    cls()
     print('- LLISTA DE SALES I SESSIONS -')
     mostra_sales_i_sessions(cine_actiu)
     while True:
         try:
-            if sala:= demana_sala():
-                return sala
-            return None
+            sala = demana_sala()
+            return sala
         except sala_no_trobada:
             print('Sala incorrecta')
 
@@ -262,7 +251,7 @@ def mostra_menu() -> None:
     global sala_activa
 
     while True:
-        neteja_pantalla()
+        cls()
         print('- MENÚ PRINCIPAL -')
         print('------------------')
         print('1- Cines i sales')
@@ -280,11 +269,12 @@ def mostra_menu() -> None:
         elif opc=='2':
             menu_pel_licules()
         elif opc=='3':
-            if not cine_actiu:
-                cine_actiu = selecciona_cine()
-            if cine_actiu:
-                sala_activa = selecciona_sala()
-        
+            try:
+                if not cine_actiu:
+                    cine_actiu = selecciona_cine()
+                    sala_activa = selecciona_sala()
+            except input_type_cancel·lat:
+                continue        
 
 
 p1 = Pel_licula('p1')
