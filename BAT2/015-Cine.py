@@ -1,24 +1,22 @@
 from __future__ import annotations
+from dataclasses import dataclass
 import datetime as dt
 import os
 import platform
-from dataclasses import dataclass
 import pickle
 
-class pelicula_no_trobada(Exception):
-    pass
-class sessio_no_trobada(Exception):
-    pass
-class sala_no_trobada(Exception):
-    pass
-class cine_no_trobat(Exception):
-    pass
-class input_type_cancel·lat(Exception):
-    pass
+#==========================================================================================================
+# Excepcions
+#==========================================================================================================
+class pelicula_no_trobada(Exception): pass
+class sessio_no_trobada(Exception): pass
+class sala_no_trobada(Exception): pass
+class cine_no_trobat(Exception): pass
+class input_type_cancel·lat(Exception): pass
+class pel_licula_utilitzada_en_una_sessio(Exception): pass
 
-class pel_licula_utilitzada_en_una_sessio(Exception):
-    pass
-
+#==========================================================================================================
+# VARIABLES GLOBALS
 #==========================================================================================================
 pel_licules:list[Pel_licula] = []
 cines:list[Cine] = []
@@ -30,6 +28,8 @@ def cls(txt:str|None=None):
     if txt:
         print(txt)
 
+#==========================================================================================================
+# CLASSES
 #==========================================================================================================
 class Reserva:
     def __init__(self, dni:str) -> None:
@@ -72,6 +72,9 @@ class Cine:
         self.sales:list[Sala] = []
 
     def busca_sala(self, id_sala:int) -> Sala:
+        '''Busca una sala pel seu id en la llista de sales del cine.
+        Si la troba retorna la llista, sinó llança l'excepció 'sala_no_trobada'
+        '''
         for sala in self.sales:
             if sala.id == id_sala:
                 return sala
@@ -99,6 +102,9 @@ class Sala:
         cine.sales.append(self)
     
     def busca_sessio(self, id_sessio: int) -> Sessio:
+        ''' Busca una sessio pel seu id en la llista de sessions de la sala.
+        Si la troba retorna la sala, sinó llança l'excepció 'sessio_no_trobada'
+        '''
         for sessio in self.sessions:
             if sessio.id==id_sessio:
                 return sessio
@@ -126,6 +132,7 @@ class Sessio:
         sala.sessions.append(self)
     
     def mostra_reserves(self) -> None:
+        '''Mostra per pantalla les reserves de la sessió per fila '''
         for i, fila in enumerate(self.reserves):
             print(f'fila {i}: {fila}')
     
@@ -140,6 +147,9 @@ class Sessio:
 
 #------------------------------------------------------------------------
 def obtin_data() -> dt.date|None:
+    ''' Pregunta a l'usuari una data. Verifica que es correcta i avisa si no ho és.
+    Retorna una data o None si l'usuari no n'ha introduit cap (fa intro).
+    '''
     while True:
         try:
             d = input('Si vols, introduïx un data (ddmmaa)')
@@ -151,6 +161,10 @@ def obtin_data() -> dt.date|None:
 
 #------------------------------------------------------------------------
 def obtin_data_hora() -> dt.datetime:
+    ''' Pregunta a l'usuari una data en forma ddmmaa i una hora en forma hhmm.
+    Verifica que es la i l'hora són correctes i avisa si no ho és.
+    Retorna el datetime corresponent. Si polsem intro llança l'excepció 'input_type_cancel·lat'
+    '''
     while True:
         try:
             ddmmaa = input_type('Introduïx un data (ddmmaa)', 'str')
@@ -165,6 +179,10 @@ def obtin_data_hora() -> dt.datetime:
 # Manteniment de pel·lícules
 #==========================================================================================================
 def menu_pel_licules() -> None:
+    ''' Mostra la llista de pel·ícules y després un menú per al seu manteniment.
+    El menú permet crear, modificar i esborrar pel·lícules. Si polsem intro tanquem el menú (return).
+    No podrem esborrar una pel·lícula que s'estiga projectan en alguna sessió de qualsevol cine.
+    '''
     while True:
         try:
             cls('- LLISTA DE PEL·LÍCULES -')
@@ -178,8 +196,6 @@ def menu_pel_licules() -> None:
                 modifica_pel_licula()
             elif opc =='3':
                 esborra_pel_licula()
-            else:
-                print('Opció incorrecta')
         except input_type_cancel·lat:
             continue
         except pel_licula_utilitzada_en_una_sessio:
@@ -187,6 +203,8 @@ def menu_pel_licules() -> None:
 
 #------------------------------------------------------------------------
 def mostra_pel_licules() -> None:
+    ''' Mostra informació de la llista de pel·lícules (id y info)
+    '''
     if not pel_licules:
         print(' No hi ha pel·licules')
         return
@@ -197,6 +215,9 @@ def mostra_pel_licules() -> None:
 
 #------------------------------------------------------------------------
 def crea_pel_licula() -> None:
+    ''' Crea una pel·licula i la grava. Demana la seua descripció.
+    Si polsem intro llança l'excepció 'input_type_cancel·lat'. Grava els canvis.
+    '''
     print("CREACIÓ D'UNA PEL·LÍCULA:")
     while True:
         descripcio = input_type('Descripció de la pel·lícula')  
@@ -208,6 +229,9 @@ def crea_pel_licula() -> None:
 
 #------------------------------------------------------------------------
 def busca_pel_licula(id: int) -> Pel_licula:
+    ''' Busca una pel·lícula pel seu id en la llista de pel·lícules.
+    Si la troba retorna la pel·lícula, sinó llança l'excepció 'pelicula_no_trobada'
+    '''
     for pel_licula in pel_licules:
             if pel_licula.id==id:
                 return pel_licula
@@ -215,6 +239,9 @@ def busca_pel_licula(id: int) -> Pel_licula:
 
 #------------------------------------------------------------------------
 def demana_pel_licula(txt:str) -> Pel_licula:
+    ''' Demana l'id d'una pel·lícula, la busca en la llista de pel·lícules i retorna la Pel·lícula.
+    Si polsem intro llança l'excepció 'input_type_cancel·lat' 
+    '''
     while True:       
         try:
             id = input_type(txt,'int')           # type: ignore
@@ -225,6 +252,10 @@ def demana_pel_licula(txt:str) -> Pel_licula:
 
 #------------------------------------------------------------------------
 def modifica_pel_licula() -> None:
+    ''' Modifica una pel·lícula. Primer demana un id de pel·licula a l'usuari i la busca entre la llista de pel·lícules.
+    Demana a l'usuari una descripció nova i la reemplaça la descripció vella. Grava els canvis en disc.
+    Si polsem intro llança l'excepció 'input_type_cancel·lat'.
+    '''
     print("MODIFICACIÓ D'UNA PEL·LÍCULA")
     print('----------------------------')
     pel_licula = demana_pel_licula('Id de la pel·lícula a modificar')
@@ -235,7 +266,9 @@ def modifica_pel_licula() -> None:
 
 #------------------------------------------------------------------------
 def pel_licula_utilitzada_en_alguna_sessio(pel_licula:Pel_licula) -> bool:
-    '''No podem esborrar una pel·lícula si hi ha una sessió que la utilitza'''
+    '''No podem esborrar una pel·lícula si hi ha una sessió en qualsevol sala que la projecta.
+    Retorna True si alguna sala la projecta, False si no.
+    '''
     for cine in cines:
         for sala in cine.sales:
             for sessio in sala.sessions:
@@ -244,6 +277,10 @@ def pel_licula_utilitzada_en_alguna_sessio(pel_licula:Pel_licula) -> bool:
     return False
 #------------------------------------------------------------------------
 def esborra_pel_licula():
+    ''' Esborra una pel·lícula de la llista de pel·lícules. Demana l'id de la pel·licula a esborrar.
+    La busca d'entre la llista de pel·lícules. Avisa si la pel·lícula es projecta en alguna sessió.
+    Si polsem intro llança l'excepció 'input_type_cancel·lat'. Grava els canvis en disc.
+    '''
     print("ESBORRAT D'UNA PEL·LÍCULA")
     print('-------------------------')
     pel_licula = demana_pel_licula('Id de la pel·lícula a esborrar')
@@ -255,6 +292,11 @@ def esborra_pel_licula():
 
 #------------------------------------------------------------------------
 def input_type(text:str, type:str='str', excepcio:bool=True, intro_cancellar:bool=True) -> int|str|float|None:
+    '''Funció ampliació de l'input de Python. Demana a l'usuari un valor que convertix a un tipus de dada determinat
+    segons el valor del paràmetre type, el qual pot ser 'int','str' o 'float'. Si l'usuari no introduix res (intro)
+    segon el valor del paràmetre excepcio generarà l'excepció 'input_type_cancel·lat' o retonarà ''.
+    Al fer l'input mostra de manera automàtica el text (Intro=cancel·lar). Este text es pot ocultar amb el parametre intro_cancellar=False.
+    '''
     while True:
         try:
             txt_intro = '(Intro=cancel·lar) ' if intro_cancellar else ''
@@ -276,6 +318,9 @@ def input_type(text:str, type:str='str', excepcio:bool=True, intro_cancellar:boo
 # Reserves
 #==========================================================================================================
 def busca_cine(id: int) -> Cine:
+    ''' Busca un cine pel seu id en la llista de cines.
+    Si ela troba retorna el cine, sinó llança l'excepció 'cine_no_trobat'
+    '''
     for cine in cines:
         if cine.id==id:
             return cine
@@ -283,6 +328,8 @@ def busca_cine(id: int) -> Cine:
 
 #------------------------------------------------------------------------
 def mostra_cine_i_sales() -> None:
+    ''' Mostra els cines (id i descripció) i les sales d'estos cines (id, descripció).
+    '''
     for cine in cines:
         print('---------------------------------')
         print(f'CINE ({cine.id}): {cine.descripcio}')
@@ -292,6 +339,10 @@ def mostra_cine_i_sales() -> None:
 
 #------------------------------------------------------------------------
 def selecciona_cine() -> Cine:
+    '''Mostra una llista de cines i les seues sales.
+    Demana un id de cine i el busca. Si el troba retorna el cine.
+    Si polsem intro llança l'excepció 'input_type_cancel·lat'.
+    '''
     cls('- LLISTA DE CINES -')
     if not cines:
         input(' No hi ha cines. Intro per a continuar')
@@ -303,10 +354,14 @@ def selecciona_cine() -> Cine:
             cine = busca_cine(id_cine)                                  # type: ignore
             return cine
         except cine_no_trobat:
-            print('Id del cine incorrete')
+            print('Id del cine incorrecte')
 
 #------------------------------------------------------------------------
 def mostra_sales_i_sessions(cine:Cine) -> None:
+    ''' Mostra informació del cine que li passem com a paràmetre (id i descripció).
+    A continuació, mostra informaciño de les sales del cine (id i descripció) i de cadascuna de les
+    seues sessions (id, data y hora, info de la pel·licula y el preu).
+    '''
     print(f'Cine ({cine.id}): {cine.descripcio}')                         # type: ignore
     for sala in cine.sales:
         print('   ---------------------------------')                   # type: ignore
@@ -320,18 +375,28 @@ def mostra_sales_i_sessions(cine:Cine) -> None:
 
 #------------------------------------------------------------------------
 def demana_sala(cine:Cine) -> Sala:
+    ''' Demana l'id d'un sala, la busca d'entre la llista de sales del cine i retorna la sala.
+    Si no la troba llança l'excepció 'sala_no_trobada'. Si polsem intro llança l'excepció 'input_type_cancel·lat'
+    '''
     id_sala = input_type('Selecciona una sala:', 'int')
     sala = cine.busca_sala(id_sala)                    # type: ignore
     return sala
 
 #------------------------------------------------------------------------
 def demana_sessio(sala:Sala) -> Sessio:
+    ''' Demana l'id d'una sessió, la busca d'entre la llista de sessions de la sala i retorna la sala.
+    Si no la troba llança l'excepció 'sessio_no_trobada'. Si polsem intro llança l'excepció 'input_type_cancel·lat'.
+    '''
     id_sessio = input_type('Selecciona una sessió:', 'int')
     sessio = sala.busca_sessio(id_sessio)              # type: ignore
     return sessio
 
 #------------------------------------------------------------------------
-def demana_seient(sala:Sala, sessio:Sessio) -> tuple[int,int]:
+def demana_seient(sala:Sala) -> tuple[int,int]:
+    ''' Demana una fila (int) i un seient (int). Estos valors es verifiquen contra 
+        els valors de files i seient de la sala que li passem. Retorna una fila i
+        seient vàlids per a la sala. Si polsem intro llança l'excepció 'input_type_cancel·lat'.
+    '''
     while True:
         fila:int = input_type('Fila:','int')            # type: ignore
 
