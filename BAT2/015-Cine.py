@@ -16,6 +16,9 @@ class cine_no_trobat(Exception):
 class input_type_cancel·lat(Exception):
     pass
 
+class pel_licula_utilitzada_en_una_sessio(Exception):
+    pass
+
 #==========================================================================================================
 pel_licules:list[Pel_licula] = []
 cines:list[Cine] = []
@@ -49,6 +52,15 @@ class Pel_licula:
         if not isinstance(obj, Pel_licula):
             return False
         return obj.id==self.id
+    
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['id_'] = Pel_licula.id
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        Pel_licula.id = state['id_']
 
 #==========================================================================================================
 class Cine:
@@ -64,6 +76,15 @@ class Cine:
             if sala.id == id_sala:
                 return sala
         raise sala_no_trobada
+    
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['id_'] = Cine.id
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        Cine.id = state['id_']
 
 #==========================================================================================================
 class Sala:
@@ -82,6 +103,15 @@ class Sala:
             if sessio.id==id_sessio:
                 return sessio
         raise sessio_no_trobada
+    
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['id_'] = Sala.id
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        Sala.id = state['id_']
 
 #==========================================================================================================
 class Sessio:
@@ -98,6 +128,15 @@ class Sessio:
     def mostra_reserves(self) -> None:
         for i, fila in enumerate(self.reserves):
             print(f'fila {i}: {fila}')
+    
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state['id_'] = Sessio.id
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        Sessio.id = state['id_']
 
 #------------------------------------------------------------------------
 def obtin_data() -> dt.date|None:
@@ -143,6 +182,8 @@ def menu_pel_licules() -> None:
                 print('Opció incorrecta')
         except input_type_cancel·lat:
             continue
+        except pel_licula_utilitzada_en_una_sessio:
+            input("Error, no es pot esborrar perquè hi ha sessions que la projecten")
 
 #------------------------------------------------------------------------
 def mostra_pel_licules() -> None:
@@ -151,7 +192,7 @@ def mostra_pel_licules() -> None:
         return
     
     for pel_licula in pel_licules:
-        print(f'{pel_licula.id} {pel_licula.info}')
+        print(f'({pel_licula.id}): {pel_licula.info}')
     print()
 
 #------------------------------------------------------------------------
@@ -184,7 +225,8 @@ def demana_pel_licula(txt:str) -> Pel_licula:
 
 #------------------------------------------------------------------------
 def modifica_pel_licula() -> None:
-    print("MODIFICACIÓ D'UNA PEL·LÍCULA:")
+    print("MODIFICACIÓ D'UNA PEL·LÍCULA")
+    print('----------------------------')
     pel_licula = demana_pel_licula('Id de la pel·lícula a modificar')
     info = input('Nova descripció? ')
     pel_licula.info = info
@@ -192,9 +234,21 @@ def modifica_pel_licula() -> None:
     print('Fet')
 
 #------------------------------------------------------------------------
+def pel_licula_utilitzada_en_alguna_sessio(pel_licula:Pel_licula) -> bool:
+    '''No podem esborrar una pel·lícula si hi ha una sessió que la utilitza'''
+    for cine in cines:
+        for sala in cine.sales:
+            for sessio in sala.sessions:
+                if sessio.pel_licula==pel_licula:
+                    return True
+    return False
+#------------------------------------------------------------------------
 def esborra_pel_licula():
-    print("ESBORRAT D'UNA PEL·LÍCULA:")
+    print("ESBORRAT D'UNA PEL·LÍCULA")
+    print('-------------------------')
     pel_licula = demana_pel_licula('Id de la pel·lícula a esborrar')
+    if pel_licula_utilitzada_en_alguna_sessio(pel_licula):
+        raise pel_licula_utilitzada_en_una_sessio
     pel_licules.remove(pel_licula)
     grava_arxiu()
     print('Fet')
@@ -231,9 +285,9 @@ def busca_cine(id: int) -> Cine:
 def mostra_cine_i_sales() -> None:
     for cine in cines:
         print('---------------------------------')
-        print(f'CINE: {cine.id} {cine.descripcio}')
+        print(f'CINE ({cine.id}): {cine.descripcio}')
         for sala in cine.sales:
-            print(f'   SALA {sala.id} {sala.descripcio}')
+            print(f'   SALA ({sala.id}): {sala.descripcio}')
     print()
 
 #------------------------------------------------------------------------
@@ -253,15 +307,15 @@ def selecciona_cine() -> Cine:
 
 #------------------------------------------------------------------------
 def mostra_sales_i_sessions(cine:Cine) -> None:
-    print(f'Cine: {cine.id} {cine.descripcio}')                         # type: ignore
+    print(f'Cine ({cine.id}): {cine.descripcio}')                         # type: ignore
     for sala in cine.sales:
         print('   ---------------------------------')                   # type: ignore
-        print(f'   SALA: {sala.id} {sala.descripcio}')
+        print(f'   SALA ({sala.id}): {sala.descripcio}')
         if not sala.sessions:
             print('        No hi ha sessions')
             continue
         for sessio in sala.sessions:
-            print(f"       SESSIÓ {sessio.id}: {sessio.data_hora.strftime('%d/%m/%y %HH:%MM')} {sessio.pel_licula.info} {sessio.preu_entrada}")
+            print(f"       SESSIÓ ({sessio.id}): {sessio.data_hora.strftime('%d/%m/%y %HH:%MM')} {sessio.pel_licula.info} {sessio.preu_entrada}€")
     print()
 
 #------------------------------------------------------------------------
@@ -301,7 +355,7 @@ def manteniment_sessions(cine:Cine) -> None:
     while True:
         try:
             sala = demana_sala(cine)
-            print(f'Manteniment de sessions de la sala: {sala.id} {sala.descripcio}')
+            print(f'MANTENIMENT DE SESSIONS: SALA({sala.id}) {sala.descripcio}')
             opc = input_type('1-crea, 2-Modifica, 3-Esborra, 4=Reserves. Opció?', excepcio=False)
             if opc=='':
                 pass
@@ -333,38 +387,38 @@ def demana_dades_reserva() -> Reserva:
 def mateniment_reserves(cine:Cine, sala:Sala) -> None:
     while True:
         cls('- LLISTA DE RESERVES -')
-        print(f'cine {cine.id} {cine.descripcio}')
-        print(f'Sala {sala.id} {sala.descripcio}')
+        print(f'Cine: {cine.descripcio}. Sala: {sala.descripcio}')
         print()
         for sessio in sala.sessions:
-            print(f'SESSIÓ {sessio.id} {sessio.data_hora} {sessio.preu_entrada}')
+            print(f'SESSIÓ {sessio.id} {sessio.data_hora} {sessio.preu_entrada}€')
             sessio.mostra_reserves()
         try:
-            opc = input_type('1-Modifica reserva:')
-            if opc=='1':
-                fila, seient = demana_seient(sala, sessio)
-                if sessio.reserves[fila][seient]:
-                    valor:str = input(f'Eliminar la reserva {fila},{seient} (S/ )? ')   
-                    if valor.upper()=='S':
-                        sessio.reserves[fila][seient] = None
-                        grava_arxiu()
-                else:
-                    valor = input(f'Reservar {fila},{seient} (S/ )? ')                 
-                    if valor.upper()=='S':
-                        reserva = demana_dades_reserva()
-                        sessio.reserves[fila][seient] = reserva
-                        grava_arxiu()
+            id_sessio = input_type('Sessió?','int')
+            sessio = sala.busca_sessio(id_sessio)               # type: ignore
+            fila, seient = demana_seient(sala, sessio)
+            if sessio.reserves[fila][seient]:
+                valor:str = input(f'Eliminar la reserva {fila},{seient} (S/ )? ')   
+                if valor.upper()=='S':
+                    sessio.reserves[fila][seient] = None
+                    grava_arxiu()
+            else:
+                valor = input(f'Reservar {fila},{seient} (S/ )? ')                 
+                if valor.upper()=='S':
+                    reserva = demana_dades_reserva()
+                    sessio.reserves[fila][seient] = reserva
+                    grava_arxiu()
         except input_type_cancel·lat:
             return
 
 #------------------------------------------------------------------------
 def crea_sessio(sala:Sala) -> None:
-    print("CREACIÓ D'UNA SESSIÓ:")
+    print("CREACIÓ D'UNA SESSIÓ")
+    print('--------------------')
     while True:
         try:
             data_hora = obtin_data_hora()
             pel_licula = demana_pel_licula('Id de la pel·lícula') 
-            preu:float = input_type("Preu de l'entrada", 'float')       # type: ignore
+            preu:float = input_type("Preu € de l'entrada", 'float')       # type: ignore
             Sessio(sala, data_hora, pel_licula, preu)
             grava_arxiu()
             input('Fet. Intro per a continuar')
@@ -373,13 +427,14 @@ def crea_sessio(sala:Sala) -> None:
             return
 #------------------------------------------------------------------------
 def modifica_sessio(sala:Sala) -> None:
-    print("MODIFICACIÓ D'UNA SESSIÓ:")
+    print("MODIFICACIÓ D'UNA SESSIÓ")
+    print('------------------------')
     while True:
         try:
             sessio = demana_sessio(sala)
             data_hora = obtin_data_hora()
             pel_licula = demana_pel_licula('Id de la pel·lícula') 
-            preu:float = input_type("Preu de l'entrada", 'float')       # type: ignore
+            preu:float = input_type("Preu € de l'entrada", 'float')       # type: ignore
             sessio.data_hora = data_hora
             sessio.pel_licula = pel_licula
             sessio.preu_entrada = preu
@@ -394,6 +449,7 @@ def modifica_sessio(sala:Sala) -> None:
 #------------------------------------------------------------------------
 def esborra_sessio(sala:Sala) -> None:
     print("ESBORRAT D'UNA SESSIÓ")
+    print('---------------------')
     while True:
         try:
             sessio = demana_sessio(sala)
@@ -472,7 +528,7 @@ def reserva_pel_licula_en_sessio(sala:Sala, sessio:Sessio) -> None:
             sessio.mostra_reserves()
             fila, seient = demana_seient(sala, sessio)
             if sessio.reserves[fila][seient]:
-                print('Error, el seient ja està reservat')
+                print('   ERROR, el seient ja està reservat')
                 continue
             reserva = demana_dades_reserva()
             sessio.reserves[fila][seient] = reserva
@@ -504,9 +560,9 @@ def mostra_menu() -> None:
         cls('- MENÚ PRINCIPAL -')
         print('------------------')
         print('1- Cines i sales (no implementat)')
-        print('2- Pel·lícules')
-        print('3- Sessions')
-        print('4- Reserves')
+        print('2- Manteniment de pel·lícules')
+        print('3- Manteniment sessions i reserves')
+        print('4- Reservar una pel·lícula')
         print()
 
         try:
