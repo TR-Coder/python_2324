@@ -250,13 +250,11 @@ def crea_pel_licula() -> None:
     Si polsem intro llança l'excepció 'input_type_cancel·lat'. Grava els canvis.
     '''
     print("CREACIÓ D'UNA PEL·LÍCULA:")
-    while True:
-        descripcio = input_type('Descripció de la pel·lícula')  
-        pel_licula = Pel_licula(descripcio)                     # type: ignore
-        pel_licules.append(pel_licula)
-        grava_arxiu()
-        print('Fet')
-        return
+    descripcio = input_type('Descripció de la pel·lícula')  
+    pel_licula = Pel_licula(descripcio)                     # type: ignore
+    pel_licules.append(pel_licula)
+    grava_arxiu()
+    print('Fet')
 
 #------------------------------------------------------------------------
 def busca_pel_licula(id: int) -> Pel_licula:
