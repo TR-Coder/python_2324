@@ -9,12 +9,12 @@ L'OPP intenta superar les limitacions de la programació estructurada mitjançan
 Un objecte encapsula una atributs i uns mètodes que els manipulen. Els atributs són les propietats (variables) de l'objecte i els mètodes les funcions per a manipular-les.
 
 
-Una classe és com una plantilla del mateix tipus.
-El procés de crear un objecte a partir de la classe es un procés anomenat _instanciar_. Tot objecte pertany sempre a una determinada classe.
+Una classe és com una plantilla.
+El procés de crear un objecte a partir de la classe és un procés anomenat _instanciar_. Tot objecte pertany sempre a una determinada classe.
 
-Per a instanciar s'usa un mètode especial anomenat _constructor_ que crea l'objete i inicialitza els atributs als seua valors inicials. En Python és el mètode \___init___()
+Per a instanciar s'usa un mètode especial anomenat _constructor_ que crea l'objete i inicialitza els atributs als seus valors inicials. En Python és el mètode \___init___()
 
-Una vegada crear un objecte utilitzem l'operador punt per accedir i modificar el seus atributs, així com executar els seus mètodes.
+Una vegada creat un objecte utilitzem l'operador punt per accedir i modificar el seus atributs, així com executar els seus mètodes.
 
 
 
@@ -54,11 +54,11 @@ En una herència de classes diferents classes poden tindre un mètodes amb el ma
 ## Constructor __init__(self)
 Un constructor és un mètode especial que crea un objecte (instància d'una classe) i inicialitza les seues variables d'instància. En Python és el mètode \_\_init\_\_(self).
 
-\_\_init\_\_(self) no retorna mai cap valor. També és opcional i es pot ometre si no hi ha variables d'instància.
+\_\_init\_\_(self) no retorna mai cap valor (None). També és opcional i es pot ometre si no hi ha variables d'instància.
 
 El primer paràmetre ha de ser sempre self i fa referència al propi objecte que s'està inicialitzant.
 
-Per instanciar un objecte cridem al nom de la classe i entre parèntesis els arguments que li passen al constructor \_\_init\_\_().
+Per a instanciar un objecte cridem al nom de la classe i entre parèntesis els arguments que li passen al constructor \_\_init\_\_().
 
 self se passa automàticament a init().
 
@@ -168,9 +168,9 @@ b2.n				# 2
 ## Atributs privats
 Python no té atributs privats i deixa la responsabilitat de l'accés als atributs al programador.
 
-Per convenció aquells atributs que volem fer «ocults» han de començar amb un doble guió. Com vorem, això no impedix que siguem capaços d'accedir a estos atributs. El doble guió és com un avís de que la variable ha de ser considera oculta i no es convenient accedir a ella directament.
+Per convenció, aquells atributs que volem fer «ocults» han de començar amb un doble guió. Com vorem, això no impedix que siguem capaços d'accedir a estos atributs. El doble guió és com un avís de que la variable ha de ser considera oculta i no és convenient accedir a ella directament.
 
-Quan posem un doble guió, el que ocorre és el que es coneix com a «name mangling» que consistix en modificar el nom de l'atribut amb un prefix _Classe, on Classe és el nom de la classe. En el següent exemple es veu com sabent com s'reanomenen les variables som capaços d'accedir a ella. 
+Quan posem un doble guió, el que ocorre és el que es coneix com a «name mangling», que consistix en modificar el nom de l'atribut amb un prefix _Classe, on Classe és el nom de la classe. En el següent exemple es veu com, sabent com s'reanomenen les variables, som capaços d'accedir a ella. 
 
 ```python
 class Base:
@@ -243,7 +243,7 @@ class Base:
 
 
 base = Base('base', 1)
-print(base.variacio_pes)		# 0.3
+print(base.variacio_pes)		# 0.3   Fixem-nos que no posem els ()
 ```
 ## Mètodes d'instància, de classe i estàtics
 
@@ -555,7 +555,7 @@ Ara redefinim init() en la classe Filla. Obtenim un error ja que com no hem crid
 ```python
 class Filla(Pare):
     def __init__(self, num):
-        self.n = num
+        self.x = num
         
     def mostra(self):
         print(self.n)       AttributeError: 'Filla' object has no attribute 'n'
@@ -567,7 +567,7 @@ Ara ho fem bé.
 class Filla(Pare):
     def __init__(self, num):
         super().__init__(num)
-        self.m = num
+        self.x = num
         
     def mostra(self):
         print(self.n)  
