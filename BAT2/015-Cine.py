@@ -657,18 +657,17 @@ def grava_arxiu() -> None:
         pickle.dump(pel_licules, fd)
         pickle.dump(cines, fd)
 
-def llig_arxiu() -> None:
+def llig_arxiu() -> tuple[list[Pel_licula],list[Cine]]:
     ''' Si arxiu.pkl no existix el crea y grava en ell la llista de pel·licules i la de cines.
     Si arxiu.pkl existix el sobreescriu amb les llistes de pel·licules i de cines.
     '''
-    global pel_licules
-    global cines
     if not os.path.exists('arxiu.pkl'):
         grava_arxiu()
-        return
+
     with open('arxiu.pkl', 'rb') as fd:
         pel_licules = pickle.load(fd)
         cines = pickle.load(fd)
+        return pel_licules, cines
 
 #==========================================================================================================
 # Menú principal.
@@ -736,5 +735,7 @@ def mostra_menu() -> None:
 # Sessio(sala2_2,data2,p3,6)
 
 if __name__ == "__main__":
-    llig_arxiu()
+    p,c = llig_arxiu()
+    pel_licules.extend(p)
+    cines.extend(c)
     mostra_menu()
