@@ -2,15 +2,22 @@
 # ENUNCIATS
 # ----------
 # EXERCICI 1: Demanar un nombre i repetir la paraula 'casa' eixe nombre de vegades en diferents línies.
-# EXERCICI 2: Demanar el nombre complet i reescriure'l 3 vegades. La 1a tot en majúscules,
+
+# EXERCICI 2: Demanar el teu nom complet i reescriure'l 3 vegades. La 1a tot en majúscules,
 # 	la 2a tot en minúscules i una 3a la 1a lletra de cada paraula està en majúscula.
+
 # EXERCICI 3: Els telèfons d'una empresa tenen el format país-telèfon-extensió, com en: +034-643534992-45
 # 	Separar i mostrar per pantalla el país, el telèfon i l'extensió.
+
 # EXERCICI 4: Demanar un frase i un vocal. Substituir en la frase les ocurrències de la vocal en majúscula.
+
 # EXERCICI 5: Demanar un correu (amb @) i substituir el domini per edu.gva.es
+
 # EXERCICI 6: Demanar el preu d'un producte amb 2 decimals i mostre el nombre d'euros i el nombre de centims per separat.
+
 # EXERCICI 7: Demanar la data de naixement en format dd/mm/aaaa i separar els camps per pantalla.
 # 	Fer el mateix considerant la possibilitat que el dia i el mes ocupen un sol caràcter.
+
 # EXERCICI 8: Introduix per pantalla una llista de noms separats per coma. Mostra els nom per pantalla cadascun en una línia.
 
 
@@ -30,8 +37,7 @@ print(nom2.title())
 
 # EXERCICI 3
 telefon: str = input('Introduïx un telèfon amb el format +xxx-yyyyyyyyy-zz')
-print(
-    f'El país és {telefon[:4]}, el telèfons és {telefon[5:14]} i l\'extensió {telefon[-2:]}')
+print(f'El país és {telefon[:4]}, el telèfons és {telefon[5:14]} i l\'extensió {telefon[-2:]}')
 
 # EXERCICI 4
 frase: str = input('Introduïx una frase: ')

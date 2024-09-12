@@ -23,7 +23,7 @@
 
 
 
-# SOLUCIÓ A
+# SOLUCIÓ A1
 
 segons: float = float(input('Introduïx els segons: '))
 
@@ -42,15 +42,27 @@ dies = dies % 365
 print(f'Són {int(anys)} anys, {int(dies)} dies, {int(hores)} hores, {int(minuts)} minuts i {int(segons)} segons')
 
 
-# SOLUCIÓ B
-anys = segons // 31536000
-segons %= 31536000
-dies = segons // 86400
-segons %= 86400
-hores = segons // 3600
-segons %= 3600
-minuts = segons // 60
-segons %= 60
+# SOLUCIÓ A2
+
+segons: float = float(input('Introduïx els segons: '))
+
+SEGONS_PER_MINUT:int = 60
+SEGONS_PER_HORA:int = 60*SEGONS_PER_MINUT
+SEGONS_PER_DIA:int = 24*SEGONS_PER_HORA
+SEGONS_PER_ANY:int = 365*SEGONS_PER_DIA
+
+anys = segons // SEGONS_PER_ANY
+segons %= SEGONS_PER_ANY
+
+dies = segons // SEGONS_PER_DIA
+segons %= SEGONS_PER_DIA
+
+hores = segons // SEGONS_PER_HORA
+segons %= SEGONS_PER_HORA
+
+minuts = segons // SEGONS_PER_MINUT
+segons %= SEGONS_PER_MINUT
+
 print(anys, dies, hores, minuts, segons)
 
 
@@ -90,16 +102,21 @@ print(anys, dies, hores, minuts, segons)
 # 1980	31.622.400
 
 
-segons = 94694_401
 
-segons_per_any = 31_536_000           # 365 dies
-segons_per_any_bixest = 31_622_400    # 366 dies
+segons = 94694401  # 3 anys i 1 segon
+
+ANY_INICIAL = 1970
+SEGONS_PER_MINUT = 60
+SEGONS_PER_HORA = 60*SEGONS_PER_MINUT
+SEGONS_PER_DIA = 24*SEGONS_PER_HORA
+SEGONS_PER_ANY = 365*SEGONS_PER_DIA 
+SEGONS_PER_ANY_BIXEST = 366*SEGONS_PER_DIA 
 
 anys = 0
 while True:
-    any_actual = 1970 + anys
+    any_actual = ANY_INICIAL + anys
     es_bixest = (any_actual % 4 == 0 and any_actual % 100 != 0) or (any_actual % 400 == 0)
-    segons_per_any_actual = segons_per_any_bixest if es_bixest else segons_per_any
+    segons_per_any_actual = SEGONS_PER_ANY_BIXEST if es_bixest else SEGONS_PER_ANY
 
     if segons < segons_per_any_actual:
         break
@@ -107,11 +124,13 @@ while True:
     segons -= segons_per_any_actual
     anys += 1
 
-dies = segons // 86400
-segons %= 86400
-hores = segons // 3600
-segons %= 3600
-minuts = segons // 60
-segons %= 60
+dies = segons // SEGONS_PER_DIA
+segons %= SEGONS_PER_DIA
+
+hores = segons // SEGONS_PER_HORA
+segons %= SEGONS_PER_HORA
+
+minuts = segons // SEGONS_PER_MINUT
+segons %= SEGONS_PER_MINUT
 
 print(anys, dies, hores, minuts, segons)
