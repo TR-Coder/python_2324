@@ -36,21 +36,18 @@ print(f'Nombre de minúscules: {nombreLletresMinuscula}')
 
 PES_MAXIM: int = 100
 suma_total: int = 0
-suma_temporal: int = 0
 pes: int = 0
 
 while True:
     pes = int(input('Introduïx el pes: '))
-    if pes == 0:
-        break
-    elif pes + suma_total == PES_MAXIM:
+    if (pes == 0) or (pes + suma_total == PES_MAXIM):
         suma_total = PES_MAXIM
         break
     elif pes + suma_total > PES_MAXIM:
         print('ERROR: has superat el pes màxim')
-    else:
-        suma_total += pes
-        print(f'Et queden, {PES_MAXIM - suma_total} kg.')
+        continue
+    suma_total += pes
+    print(f'Et queden, {PES_MAXIM - suma_total} kg.')
 
 print(f'Has introduït {suma_total} kg.')
 
@@ -64,7 +61,7 @@ print(f'Has introduït {suma_total} kg.')
 #   i cal incloure en la llista)
 nombre: int = int(input('Introduïx un nombre: '))
 print(f'Els divisors de {nombre} són: ', end='')
-for i in range(1, 1 + nombre//2):
+for i in range(1, 1 + nombre//2):                   # Sumem 1 perquè range no inclou el valor final.
     if nombre % i == 0:
         print(i, end=' ')
 print(nombre)
@@ -78,7 +75,7 @@ while True:
     nombre = int(input('Introduïx un nombre: '))
     if nombre >= 0:
         break
-    print('Error: el nombre ha de ser positiu')
+    print('Error: el nombre ha de ser positiu')     # Podem millorar el codi amb except ValueError:
 
 factorial = 1
 print(f'{nombre}! = ', end='')
